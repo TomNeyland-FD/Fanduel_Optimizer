@@ -12,7 +12,7 @@ Session = sessionmaker(bind=engine)
 
 
 
-class Fanduel(Base):
+class PlayerInfo(Base):
 	__tablename__ = 'player_info'
 	id = Column(Integer, primary_key=True)
 	firstname = Column(String)
@@ -31,8 +31,13 @@ import csv
 with open('///player_info.csv','rb') as csvfile:
 	reader = csv.DictReader(csvfile)
 	def create_players(player_dicts):
-		for row in reader:
-			player_info = Fanduel(id=row['Id'], firstname=row['First Name'], lastname=row['Last Name'], salary=row['Salary'], position=row['Position'], projected_points=row['FPPG'])
+		for player_dict in player_dicts: 
+			player_info = PlayerInfo(id=row['Id'],
+			firstname=row['First Name'],
+			lastname=row['Last Name'],
+			salary=row['Salary'],
+			position=row['Position'],
+			projected_points=row['FPPG'])
 			session.add(player_info)
 
 
