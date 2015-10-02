@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData
+from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, func, asc
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -49,17 +49,28 @@ session.commit()
 
 
 
-player_positions = ['QB', 'RB', 'RB', 'WR', 'WR', 'WR', 'TE', 'K', 'D']
-
+player_positions = ['QB', 'RB', 'WR', 'TE', 'K', 'D']
 for player_position in player_positions:
-	for terrible_player in session.query(PlayerInfo.id, PlayerInfo.firstname, PlayerInfo.lastname, func.min(PlayerInfo.salary), PlayerInfo.position).\
-    	filter(PlayerInfo.salary < 5000).\
-    	filter(PlayerInfo.position = player_position): 
-			print terrible_player.firstname, terrible_player.lastname, terrible_player.salary, terrible_player.position
+	if player_position == 'RB':
+		for terrible_player in session.query(PlayerInfo.id, PlayerInfo.firstname, PlayerInfo.lastname, PlayerInfo.salary, PlayerInfo.position).\
+    		filter(PlayerInfo.position == player_position).\
+    		order_by(PlayerInfo.salary.asc()).\
+    		limit(2):
+				print terrible_player.firstname, terrible_player.lastname, terrible_player.position, terrible_player.salary
+	
+
+	elif player_position == 'WR':			
+		for terrible_player in session.query(PlayerInfo.id, PlayerInfo.firstname, PlayerInfo.lastname, PlayerInfo.salary, PlayerInfo.position).\
+    		filter(PlayerInfo.position == player_position).\
+    		order_by(PlayerInfo.salary.asc()).\
+    		limit(3):
+				print terrible_player.firstname, terrible_player.lastname, terrible_player.position, terrible_player.salary
 
 
-
-#next issue will probably be same player being listed twice for RB & 3 times for WR
+	else:			
+		for terrible_player in session.query(PlayerInfo.id, PlayerInfo.firstname, PlayerInfo.lastname, func.min(PlayerInfo.salary).label("salary"), PlayerInfo.position).\
+    		filter(PlayerInfo.position == player_position):
+				print terrible_player.firstname, terrible_player.lastname, terrible_player.position, terrible_player.salary
 
 
 
