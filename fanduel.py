@@ -49,12 +49,6 @@ session.commit()
 
 
 
-###below is temporary
-
-#HELLO sqlite! 
-#for position in positions: #I guess i need to define positions array or whatever you call those [postiona,positionb]
-#	"Give me player WHERE 'position' = "+position+" AND 'salary' is MIN;"
-
 player_positions = ['QB', 'RB', 'RB', 'WR', 'WR', 'WR', 'TE', 'K', 'D']
 
 for player_position in player_positions:
@@ -65,7 +59,7 @@ for player_position in player_positions:
 
 
 
-
+#next issue will probably be same player being listed twice for RB & 3 times for WR
 
 
 
